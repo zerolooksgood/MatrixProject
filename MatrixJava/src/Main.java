@@ -25,7 +25,7 @@ public class Main {
 
         for (int row = 0; row < matrix.length; row++) {
 
-            for (int column = 0; column < matrix[0].length; row++) {
+            for (int column = 0; column < matrix[0].length; column++) {
 
                 calculateTile(new int[] {row, column}, tileMatrix, matrix);
 
@@ -36,6 +36,9 @@ public class Main {
     }
 
     public static void calculateTile(int[] position, Tile[][] tileMatrix, int[][] matrix) {
+
+        System.out.println("\n\nCalculating {" + position[0] + ", " + position[1] + "}");
+
         if (position[0] == 0 && position[1] == 0) {
 
             int sum = matrix[0][0];
@@ -46,6 +49,10 @@ public class Main {
 
             tileMatrix[0][0] = new Tile(new HashMap<>(highestAndLowestPath), new HashMap<>(highestAndLowestPath));
 
+            sum = 0;
+            path.clear();
+            highestAndLowestPath.clear();
+
         } else if (position[0] == 0 && position[1] > 0) {
 
             Map<Integer, List<int[]>> highestAndLowestPath = new HashMap<>(tileMatrix[0][position[1] - 1].highestPath);
@@ -55,7 +62,7 @@ public class Main {
             List<int[]> path = new ArrayList<>(entry.getValue());
             path.add(new int[] {0, position[1]});
 
-            highestAndLowestPath = new HashMap<>();
+            highestAndLowestPath.clear();
             highestAndLowestPath.put(sum, new ArrayList<>(path));
 
             tileMatrix[0][position[1]] = new Tile(new HashMap<>(highestAndLowestPath), new HashMap<>(highestAndLowestPath));
@@ -69,7 +76,7 @@ public class Main {
             List<int[]> path = new ArrayList<>(entry.getValue());
             path.add(new int[] {position[0], 0});
 
-            highestAndLowestPath = new HashMap<>();
+            highestAndLowestPath.clear();
             highestAndLowestPath.put(sum, new ArrayList<>(path));
 
             tileMatrix[position[0]][0] = new Tile(new HashMap<>(highestAndLowestPath), new HashMap<>(highestAndLowestPath));
@@ -107,7 +114,7 @@ public class Main {
 
             }
 
-            if (lowestPathLeftEntry.getKey() > lowestPathAboveEntry.getKey()) {
+            if (lowestPathLeftEntry.getKey() < lowestPathAboveEntry.getKey()) {
 
                 int sum = lowestPathLeftEntry.getKey() + matrix[position[0]][position[1]];
                 List<int[]> path = new ArrayList<>(lowestPathLeftEntry.getValue());
@@ -126,7 +133,23 @@ public class Main {
             }
 
             tileMatrix[position[0]][position[1]] = new Tile(new HashMap<>(highestPath), new HashMap<>(lowestPath));
+
         }
+        printHighestAndLowestTest(tileMatrix[position[0]][position[1]]);
+    }
+
+    public static void printHighestAndLowestTest(Tile tile) {
+
+        Map.Entry<Integer, List<int[]>> highestPath = tile.highestPath.entrySet().iterator().next();
+        Map.Entry<Integer, List<int[]>> lowestPath = tile.lowestPath.entrySet().iterator().next();
+
+        System.out.println("\nPath with the highest sum:");
+        System.out.println("Sum: " + highestPath.getKey());
+        System.out.println("Path: " + printList(highestPath.getValue()));
+
+        System.out.println("\nPath with the lowest sum:");
+        System.out.println("Sum: " + lowestPath.getKey());
+        System.out.println("Path: " + printList(lowestPath.getValue()));
     }
 
     public static void printHighestAndLowest(Tile[][] tileMatrix) {
