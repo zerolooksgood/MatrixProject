@@ -1,12 +1,43 @@
+import jdk.jshell.execution.Util;
+
 import java.util.List;
-import java.util.Map;
 
 public class Tile {
-    public static Map<Integer, List<int[]>> highestPath;
-    public static Map<Integer, List<int[]>> lowestPath;
+    private int maxSum;
+    private List<int[]> maxPath;
 
-    public Tile(Map<Integer, List<int[]>> HighestPath, Map<Integer, List<int[]>> LowestPath) {
-        this.highestPath = HighestPath;
-        this.lowestPath = LowestPath;
+    private int minSum;
+    private List<int[]> minPath;
+
+    public Tile(int maxSum, List<int[]> maxPath, int minSum, List<int[]> minPath) {
+        this.maxSum = maxSum;
+        this.maxPath = Utils.deepCopyList(maxPath);
+        this.minSum = minSum;
+        this.minPath = Utils.deepCopyList(minPath);
+    }
+
+    public int getMaxSum() {
+        return maxSum;
+    }
+
+    public List<int[]> getMaxPath() {
+        return Utils.deepCopyList(maxPath);
+    }
+
+    public int getMinSum() {
+        return minSum;
+    }
+
+    public List<int[]> getMinPath() {
+        return Utils.deepCopyList(minPath);
+    }
+
+    public void printHighestLowestPath () {
+        System.out.println("\nPath with the highest sum:");
+        System.out.println("Sum: " + maxSum);
+        System.out.println("Path: " + Utils.printList(maxPath));
+        System.out.println("\nPath with the lowest sum:");
+        System.out.println("Sum: " + minSum);
+        System.out.println("Path: " + Utils.printList(minPath));
     }
 }
